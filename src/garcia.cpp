@@ -46,9 +46,9 @@ void setupGarcia() {
     pinMode(BUZZER_PIN, OUTPUT);
 
     // Color Sensor
-    pinMode(SC_S2, OUTPUT);
-    pinMode(SC_S3, OUTPUT);
-    pinMode(SC_OUT, INPUT);
+    pinMode(COLOR_S2, OUTPUT);
+    pinMode(COLOR_S3, OUTPUT);
+    pinMode(COLOR_OUT, INPUT);
 
     // Initialize LCD
     lcd.init();
@@ -139,35 +139,35 @@ void lcd_write(String text, int row, int column) {
 /* -------------------------------------------------------------------------------
     Color sensor functions
 ------------------------------------------------------------------------------- */
-sensor_cor::sensor_cor(int S2_pin, int S3_pin, int OUT_pin)
-    : S2_pin(S2_pin), S3_pin(S3_pin), OUT_pin(OUT_pin) {}
+ColorSensor::ColorSensor(int s2Pin, int s3Pin, int outPin)
+    : s2Pin(s2Pin), s3Pin(s3Pin), outPin(outPin) {}
 
 
-void sensor_cor::ReadColor() {
+void ColorSensor::readColor() {
     for (int x=0; x<3; x++) {
         switch(x){
             case 0:
-                digitalWrite(SC_S2, LOW);
-                digitalWrite(SC_S3, LOW);
+                digitalWrite(COLOR_S2, LOW);
+                digitalWrite(COLOR_S3, LOW);
                 break;
             case 1:
-                digitalWrite(SC_S2, HIGH);
-                digitalWrite(SC_S3, HIGH);
+                digitalWrite(COLOR_S2, HIGH);
+                digitalWrite(COLOR_S3, HIGH);
                 break;
             case 2:
-                digitalWrite(SC_S2, LOW);
-                digitalWrite(SC_S3, HIGH);
+                digitalWrite(COLOR_S2, LOW);
+                digitalWrite(COLOR_S3, HIGH);
                 break;
             case 3:
-                digitalWrite(SC_S2, HIGH);
-                digitalWrite(SC_S3, LOW);
+                digitalWrite(COLOR_S2, HIGH);
+                digitalWrite(COLOR_S3, LOW);
                 break;
         }
-        VR[x] = pulseIn(SC_OUT, LOW);
+        VR[x] = pulseIn(COLOR_OUT, LOW);
     }
 } 
 
-void sensor_cor::ShowColor() {
+void ColorSensor::showColor() {
     Serial.print("R:");
     Serial.print(VR[0]);
     Serial.print("-G:");
@@ -176,32 +176,32 @@ void sensor_cor::ShowColor() {
     Serial.print(VR[2]);
     Serial.println("\n");
 }
-void sensor_cor::setup_cor(int cor, unsigned long R, unsigned long G, unsigned long B, unsigned long erro) {
+void ColorSensor::setupColor(int color, unsigned long r, unsigned long g, unsigned long b, unsigned long tolerance) {
     //Implementation for color sensor calibration
-    switch(cor) {
+    switch(color) {
         case 0:
-            Red[0] = R;
-            Red[1] = G;
-            Red[2] = B;
-            Red[3] = erro;
+            Red[0] = r;
+            Red[1] = g;
+            Red[2] = b;
+            Red[3] = tolerance;
             break;
         case 1:
-            Green[0] = R;
-            Green[1] = G;
-            Green[2] = B;
-            Green[3] = erro;
+            Green[0] = r;
+            Green[1] = g;
+            Green[2] = b;
+            Green[3] = tolerance;
             break;
         case 2:
-            Blue[0] = R;
-            Blue[1] = B;
-            Blue[2] = G;
-            Blue[3] = erro;
+            Blue[0] = r;
+            Blue[1] = b;
+            Blue[2] = g;
+            Blue[3] = tolerance;
             break;
     }
 }
 
-int sensor_cor::isColor(int testCor) {
-    switch (testCor) {
+int ColorSensor::isColor(int testColor) {
+    switch (testColor) {
         case 0:
             if((VR[0] > Red[0] - Red[3] && VR[0] < Red[0] + Red[3]) &&  (VR[1] > Red[1] - Red[3] && VR[1] < Red[1] + Red[3]) && (VR[2] > Red[2] - Red[3] && VR[2] < Red[2] + Red[3]))
                 return 1;

@@ -21,36 +21,36 @@
     Definitions
 */
 
-#define Motor_esquerdo_D 12
-#define Motor_esquerdo_PWM 3
-#define Motor_direito_D 13
-#define Motor_direito_PWM 11
+#define MOTOR_LEFT_DIR 12
+#define MOTOR_LEFT_PWM 3
+#define MOTOR_RIGHT_DIR 13
+#define MOTOR_RIGHT_PWM 11
 
-#define FRENTE 1
-#define TRAS 0
+#define FORWARD 1
+#define BACKWARD 0
 
-#define triggerPin_d 34
-#define echoPin_d 35
-#define triggerPin_e 32
-#define echoPin_e 33
+#define TRIGGER_PIN_RIGHT 34
+#define ECHO_PIN_RIGHT 35
+#define TRIGGER_PIN_LEFT 32
+#define ECHO_PIN_LEFT 33
 
-#define SP_S1 36
-#define SP_S2 37
-#define SP_S3 38
-#define SP_S4 39
-#define SP_S5 40
+#define LINE_S1 36
+#define LINE_S2 37
+#define LINE_S3 38
+#define LINE_S4 39
+#define LINE_S5 40
 
-#define SP_L 7
-#define SP_C 6
-#define SP_R 5
+#define LINE_LEFT 7
+#define LINE_CENTER 6
+#define LINE_RIGHT 5
 
 #define RGB_R 50
 #define RGB_G 51
 #define RGB_B 52
 
-#define SC_S2 42
-#define SC_S3 43
-#define SC_OUT 44
+#define COLOR_S2 42
+#define COLOR_S3 43
+#define COLOR_OUT 44
 
 #define RED 0
 #define GREEN 1
@@ -100,19 +100,19 @@ private:
     Color sensor class
 ------------------------------------------------------------------------------- */
 
-class sensor_cor
+class ColorSensor
 {
 public:
-    sensor_cor(int S2_pin, int S3_pin, int OUT_pin);
-    void ReadColor();
-    void ShowColor();
-    void setup_cor(int cor, unsigned long R, unsigned long G, unsigned long B, unsigned long erro);
-    int isColor(int testCor);
+    ColorSensor(int s2Pin, int s3Pin, int outPin);
+    void readColor();
+    void showColor();
+    void setupColor(int color, unsigned long r, unsigned long g, unsigned long b, unsigned long tolerance);
+    int isColor(int testColor);
 
 private:
-    int S2_pin;
-    int S3_pin;
-    int OUT_pin;
+    int s2Pin;
+    int s3Pin;
+    int outPin;
     unsigned long VR[4];
     unsigned long Red[4] = {0,0,0,0};
     unsigned long Green[4] = {0,0,0,0};
