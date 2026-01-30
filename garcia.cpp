@@ -31,11 +31,19 @@ void setupGarcia() {
     pinMode(SP_S3, INPUT);
     pinMode(SP_S4, INPUT);
     pinMode(SP_S5, INPUT);
-
+    
+    pinMode(SP_L, INPUT);
+    pinMode(SP_C, INPUT);
+    pinMode(SP_R, INPUT);
     // Initialize RGB LED
     pinMode(RGB_R, OUTPUT);
     pinMode(RGB_G, OUTPUT);
     pinMode(RGB_B, OUTPUT);
+
+    // Color Sensor
+    pinMode(SC_S2, OUTPUT);
+    pinMode(SC_S3, OUTPUT);
+    pinMode(SC_OUT, INPUT);
 
     // Initialize Buzzer
     pinMode(BUZZER_PIN, OUTPUT);
@@ -100,14 +108,100 @@ void sensor_pista::ler_sensores(bool &S1_valor, bool &S2_valor, bool &S3_valor, 
     S5_valor = digitalRead(S5_pin);
 }
 
+// sensor_pista::sensor_pista(int L_pin, int C_pin, int R_pin) 
+//     : L_pin(L_pin), C_pin(C_pin), R_pin(R_pin) {}
+
+// // Read function for 3 pins
+// void sensor_pista::ler_sensores(bool &L_val, bool &C_val, bool &R_val) {
+//     L_val = digitalRead(L_pin);
+//     C_val = digitalRead(C_pin);
+//     R_val = digitalRead(R_pin);
+// }
+
 void lcd_escrever(String texto, int linha, int coluna) {
     lcd.setCursor(coluna, linha);
     lcd.print(texto);
 }
 
-// sensor_cor::sensor_cor(int S2_pin, int S3_pin, int OUT_pin)
-//     : S2_pin(S2_pin), S3_pin(S3_pin), OUT_pin(OUT_pin) {}
+sensor_cor::sensor_cor(int S2_pin, int S3_pin, int OUT_pin)
+    : S2_pin(S2_pin), S3_pin(S3_pin), OUT_pin(OUT_pin) {}
 
-// void sensor_cor::setup_cor(String cor, unsigned long R, unsigned long G, unsigned long B, unsigned long erro) {
-    // Implementation for color sensor calibration
-// }
+
+void sensor_cor::ReadColor() {
+    for (int x=0; x<3; x++) {
+        switch(x){
+            case 0:
+                digitalWrite(SC_S2, LOW);
+                digitalWrite(SC_S3, LOW);
+                break;
+            case 1:
+                digitalWrite(SC_S2, HIGH);
+                digitalWrite(SC_S3, HIGH);
+                break;
+            case 2:
+                digitalWrite(SC_S2, LOW);
+                digitalWrite(SC_S3, HIGH);
+                break;
+            case 3:
+                digitalWrite(SC_S2, HIGH);
+                digitalWrite(SC_S3, LOW);
+                break;
+        }
+        VR[x] = pulseIn(SC_OUT, LOW);
+    }
+} 
+
+void sensor_cor::ShowColor() {
+    Serial.print("R:");
+    Serial.print(VR[0]);
+    Serial.print("-G:");
+    Serial.print(VR[1]);
+    Serial.print("-B:");
+    Serial.print(VR[2]);
+    Serial.println("\n");
+}
+void sensor_cor::setup_cor(int cor, unsigned long R, unsigned long G, unsigned long B, unsigned long erro) {
+    //Implementation for color sensor calibration
+    switch(cor) {
+        case 0:
+            Red[0] = R;
+            Red[1] = G;
+            Red[2] = B;
+            Red[3] = erro;
+            break;
+        case 1:
+            Green[0] = R;
+            Green[1] = G;
+            Green[2] = B;
+            Green[3] = erro;
+            break;
+        case 2:
+            Blue[0] = R;
+            Blue[1] = B;
+            Blue[2] = G;
+            Blue[3] = erro;
+            break;
+    }
+}
+
+int sensor_cor::isColor(int testCor) {
+    switch (testCor) {
+        case 0:
+            if((VR[0] > Red[0] - Red[3] && VR[0] < Red[0] + Red[3]) &&  (VR[1] > Red[1] - Red[3] && VR[1] < Red[1] + Red[3]) && (VR[2] > Red[2] - Red[3] && VR[2] < Red[2] + Red[3]))
+                return 1;
+                else
+                    return 0;
+        case 1:
+            if((VR[0] > Green[0] - Green[3] && VR[0] < Green[0] + Green[3]) &&  (VR[1] > Green[1] - Green[3] && VR[1] < Green[1] + Green[3]) && (VR[2] > Green[2] - Green[3] && VR[2] < Green[2] + Green[3]))
+                return 1;
+                else 
+                    return 0;
+        case 2:
+            if((VR[0] > Blue[0] - Blue[3] && VR[0] < Blue[0] + Blue[3]) &&  (VR[1] > Blue[1] - Blue[3] && VR[1] < Blue[1] + Blue[3]) && (VR[2] > Blue[2] - Blue[3] && VR[2] < Blue[2] + Blue[3]))
+                return 1;
+                else
+                    return 0;
+        default:
+            return 0;
+    }       
+}

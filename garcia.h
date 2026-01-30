@@ -27,7 +27,7 @@
 #define Motor_direito_PWM 11
 
 #define FRENTE 1
-#define TRÁS 0
+#define TRAS 0
 
 #define triggerPin_d 34
 #define echoPin_d 35
@@ -40,6 +40,10 @@
 #define SP_S4 39
 #define SP_S5 40
 
+#define SP_L 7
+#define SP_C 6
+#define SP_R 5
+
 #define RGB_R 50
 #define RGB_G 51
 #define RGB_B 52
@@ -47,6 +51,10 @@
 #define SC_S2 42
 #define SC_S3 43
 #define SC_OUT 44
+
+#define RED 0
+#define GREEN 1
+#define BLUE 2
 
 #define BUZZER_PIN 45
 
@@ -74,27 +82,37 @@ class sensor_pista
 public:
     sensor_pista(int S1_pin, int S2_pin, int S3_pin, int S4_pin, int S5_pin);
     void ler_sensores(bool &S1_valor, bool &S2_valor, bool &S3_valor, bool &S4_valor, bool &S5_valor);
-
+    // sensor_pista(int L_pin, int C_pin, int R_Pin );
+    // void ler_sensores(bool &L_val, bool &C_val, bool &R_val);
 private:
     int S1_pin;
-    int S2_pin;
+   int S2_pin;
     int S3_pin;
-    int S4_pin;
-    int S5_pin;
+   int S4_pin;
+   int S5_pin;
+//    int L_pin;
+//    int C_pin;
+//    int R_pin;
 };
 
-// class sensor_cor
-// {
-// public:
-//     sensor_cor(int S2_pin, int S3_pin, int OUT_pin);
-//     void setup_cor(String cor, unsigned long R, unsigned long G, unsigned long B, unsigned long erro);
+class sensor_cor
+{
+public:
+    sensor_cor(int S2_pin, int S3_pin, int OUT_pin);
+    void ReadColor();
+    void ShowColor();
+    void setup_cor(int cor, unsigned long R, unsigned long G, unsigned long B, unsigned long erro);
+    int isColor(int testCor);
 
-
-// private:
-//     int S2_pin;
-//     int S3_pin;
-//     int OUT_pin;
-// };
+private:
+    int S2_pin;
+    int S3_pin;
+    int OUT_pin;
+    unsigned long VR[4];
+    unsigned long Red[4] = {0,0,0,0};
+    unsigned long Green[4] = {0,0,0,0};
+    unsigned long Blue[4] = {0,0,0,0};
+};
 
 
 
