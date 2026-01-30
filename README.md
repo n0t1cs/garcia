@@ -24,6 +24,7 @@ Ready-to-run sketches are included in `examples/`:
 - `examples/04_LCD/04_LCD.ino`
 - `examples/05_Sonar/05_Sonar.ino`
 - `examples/06_LineSensor/06_LineSensor.ino`
+- `examples/07_ColorSensor/07_ColorSensor.ino`
 
 ## Quick Start
 1. Place this folder in your Arduino `libraries` directory.
@@ -45,6 +46,7 @@ Ready-to-run sketches are included in `examples/`:
 - `lcd_write(text, row, column)`
 - `SONAR` class: `dist_cm()`
 - `LineSensor` class: `readSensors(...)`
+- `ColorSensor` class: `readColor()`, `showColor()`, `setupColor(...)`, `isColor(...)`
 
 ## Code Examples
 Each snippet is ready to copy and paste into an Arduino sketch.
@@ -170,6 +172,40 @@ void loop() {
 }
 ```
 
+### ColorSensor
+```cpp
+#include "garcia.h"
+
+ColorSensor color(COLOR_S2, COLOR_S3, COLOR_OUT);
+
+void setup() {
+  setupGarcia();
+  Serial.begin(9600);
+
+  // Calibration examples (replace with your measured values)
+  color.setupColor(RED, 100, 120, 130, 10);
+  color.setupColor(GREEN, 140, 90, 110, 10);
+  color.setupColor(BLUE, 90, 110, 160, 10);
+}
+
+void loop() {
+  color.readColor();
+  color.showColor();
+
+  if (color.isColor(RED)) {
+    Serial.println("Detected RED");
+  } else if (color.isColor(GREEN)) {
+    Serial.println("Detected GREEN");
+  } else if (color.isColor(BLUE)) {
+    Serial.println("Detected BLUE");
+  } else {
+    Serial.println("Unknown color");
+  }
+
+  delay(200);
+}
+```
+
 ## Notes
 - Pin assignments are defined in `garcia.h`.
 - Direction constants: `FORWARD` and `BACKWARD`.
@@ -205,6 +241,7 @@ Os sketches prontos a usar estao em `examples/`:
 - `examples/04_LCD/04_LCD.ino`
 - `examples/05_Sonar/05_Sonar.ino`
 - `examples/06_LineSensor/06_LineSensor.ino`
+- `examples/07_ColorSensor/07_ColorSensor.ino`
 
 ## Inicio rapido
 1. Coloca esta pasta no diretorio `libraries` do Arduino.
@@ -226,6 +263,7 @@ Os sketches prontos a usar estao em `examples/`:
 - `lcd_write(text, row, column)`
 - Classe `SONAR`: `dist_cm()`
 - Classe `LineSensor`: `readSensors(...)`
+- Classe `ColorSensor`: `readColor()`, `showColor()`, `setupColor(...)`, `isColor(...)`
 
 ## Exemplos de codigo
 Cada snippet esta pronto para copiar e colar num sketch Arduino.
@@ -348,6 +386,40 @@ void loop() {
   Serial.println(s5);
 
   delay(100);
+}
+```
+
+### ColorSensor
+```cpp
+#include "garcia.h"
+
+ColorSensor color(COLOR_S2, COLOR_S3, COLOR_OUT);
+
+void setup() {
+  setupGarcia();
+  Serial.begin(9600);
+
+  // Exemplos de calibracao (substituir pelos teus valores)
+  color.setupColor(RED, 100, 120, 130, 10);
+  color.setupColor(GREEN, 140, 90, 110, 10);
+  color.setupColor(BLUE, 90, 110, 160, 10);
+}
+
+void loop() {
+  color.readColor();
+  color.showColor();
+
+  if (color.isColor(RED)) {
+    Serial.println("Detected RED");
+  } else if (color.isColor(GREEN)) {
+    Serial.println("Detected GREEN");
+  } else if (color.isColor(BLUE)) {
+    Serial.println("Detected BLUE");
+  } else {
+    Serial.println("Unknown color");
+  }
+
+  delay(200);
 }
 ```
 
