@@ -45,6 +45,11 @@ void setupGarcia() {
     // Initialize Buzzer
     pinMode(BUZZER_PIN, OUTPUT);
 
+    // Color Sensor
+    pinMode(COLOR_S2, OUTPUT);
+    pinMode(COLOR_S3, OUTPUT);
+    pinMode(COLOR_OUT, INPUT);
+
     // Initialize LCD
     lcd.init();
     lcd.backlight();
@@ -134,3 +139,85 @@ void lcd_write(String text, int row, int column) {
 /* -------------------------------------------------------------------------------
     Color sensor functions
 ------------------------------------------------------------------------------- */
+ColorSensor::ColorSensor(int s2Pin, int s3Pin, int outPin)
+    : s2Pin(s2Pin), s3Pin(s3Pin), outPin(outPin) {}
+
+
+void ColorSensor::readColor() {
+    for (int x=0; x<3; x++) {
+        switch(x){
+            case 0:
+                digitalWrite(COLOR_S2, LOW);
+                digitalWrite(COLOR_S3, LOW);
+                break;
+            case 1:
+                digitalWrite(COLOR_S2, HIGH);
+                digitalWrite(COLOR_S3, HIGH);
+                break;
+            case 2:
+                digitalWrite(COLOR_S2, LOW);
+                digitalWrite(COLOR_S3, HIGH);
+                break;
+            case 3:
+                digitalWrite(COLOR_S2, HIGH);
+                digitalWrite(COLOR_S3, LOW);
+                break;
+        }
+        VR[x] = pulseIn(COLOR_OUT, LOW);
+    }
+} 
+
+void ColorSensor::showColor() {
+    Serial.print("R:");
+    Serial.print(VR[0]);
+    Serial.print("-G:");
+    Serial.print(VR[1]);
+    Serial.print("-B:");
+    Serial.print(VR[2]);
+    Serial.println("\n");
+}
+void ColorSensor::setupColor(int color, unsigned long r, unsigned long g, unsigned long b, unsigned long tolerance) {
+    //Implementation for color sensor calibration
+    switch(color) {
+        case 0:
+            Red[0] = r;
+            Red[1] = g;
+            Red[2] = b;
+            Red[3] = tolerance;
+            break;
+        case 1:
+            Green[0] = r;
+            Green[1] = g;
+            Green[2] = b;
+            Green[3] = tolerance;
+            break;
+        case 2:
+            Blue[0] = r;
+            Blue[1] = b;
+            Blue[2] = g;
+            Blue[3] = tolerance;
+            break;
+    }
+}
+
+int ColorSensor::isColor(int testColor) {
+    switch (testColor) {
+        case 0:
+            if((VR[0] > Red[0] - Red[3] && VR[0] < Red[0] + Red[3]) &&  (VR[1] > Red[1] - Red[3] && VR[1] < Red[1] + Red[3]) && (VR[2] > Red[2] - Red[3] && VR[2] < Red[2] + Red[3]))
+                return 1;
+                else
+                    return 0;
+        case 1:
+            if((VR[0] > Green[0] - Green[3] && VR[0] < Green[0] + Green[3]) &&  (VR[1] > Green[1] - Green[3] && VR[1] < Green[1] + Green[3]) && (VR[2] > Green[2] - Green[3] && VR[2] < Green[2] + Green[3]))
+                return 1;
+                else 
+                    return 0;
+        case 2:
+            if((VR[0] > Blue[0] - Blue[3] && VR[0] < Blue[0] + Blue[3]) &&  (VR[1] > Blue[1] - Blue[3] && VR[1] < Blue[1] + Blue[3]) && (VR[2] > Blue[2] - Blue[3] && VR[2] < Blue[2] + Blue[3]))
+                return 1;
+                else
+                    return 0;
+        default:
+            return 0;
+    }       
+}

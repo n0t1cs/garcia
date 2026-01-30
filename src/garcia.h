@@ -40,6 +40,10 @@
 #define LINE_S4 39
 #define LINE_S5 40
 
+#define LINE_LEFT 7
+#define LINE_CENTER 6
+#define LINE_RIGHT 5
+
 #define RGB_R 50
 #define RGB_G 51
 #define RGB_B 52
@@ -47,6 +51,10 @@
 #define COLOR_S2 42
 #define COLOR_S3 43
 #define COLOR_OUT 44
+
+#define RED 0
+#define GREEN 1
+#define BLUE 2
 
 #define BUZZER_PIN 45
 
@@ -86,6 +94,29 @@ private:
     int s3Pin;
     int s4Pin;
     int s5Pin;
+};
+
+/* -------------------------------------------------------------------------------
+    Color sensor class
+------------------------------------------------------------------------------- */
+
+class ColorSensor
+{
+public:
+    ColorSensor(int s2Pin, int s3Pin, int outPin);
+    void readColor();
+    void showColor();
+    void setupColor(int color, unsigned long r, unsigned long g, unsigned long b, unsigned long tolerance);
+    int isColor(int testColor);
+
+private:
+    int s2Pin;
+    int s3Pin;
+    int outPin;
+    unsigned long VR[4];
+    unsigned long Red[4] = {0,0,0,0};
+    unsigned long Green[4] = {0,0,0,0};
+    unsigned long Blue[4] = {0,0,0,0};
 };
 
 /*
