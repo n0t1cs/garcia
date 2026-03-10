@@ -1,9 +1,9 @@
 /*
-    * garcia.cpp
-    * Library Source File
-    * Used only for Garcia de Orta School robotics workshops (2025)
-    * Created on: Dec 12, 2025
-*/
+ * garcia.cpp
+ * Library Source File
+ * Used only for Garcia de Orta School robotics workshops (2025)
+ * Created on: Dec 12, 2025
+ */
 
 #include "garcia.h"
 
@@ -12,12 +12,13 @@ LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 SONAR sonar_right(TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT);
 SONAR sonar_left(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT);
 
-
 /* -------------------------------------------------------------------------------
     Setup functions
 ------------------------------------------------------------------------------- */
 
-void setupGarcia() {
+void setupGarcia()
+{
+
     // Initialize Motors
     pinMode(MOTOR_LEFT_DIR, OUTPUT);
     pinMode(MOTOR_LEFT_PWM, OUTPUT);
@@ -50,6 +51,16 @@ void setupGarcia() {
     pinMode(COLOR_S3, OUTPUT);
     pinMode(COLOR_OUT, INPUT);
 
+    // Initialize 8 Analog Line Sensors
+    pinMode(LINE_A1, INPUT);
+    pinMode(LINE_A2, INPUT);
+    pinMode(LINE_A3, INPUT);
+    pinMode(LINE_A4, INPUT);
+    pinMode(LINE_A5, INPUT);
+    pinMode(LINE_A6, INPUT);
+    pinMode(LINE_A7, INPUT);
+    pinMode(LINE_A8, INPUT);
+
     // Initialize LCD
     lcd.init();
     lcd.backlight();
@@ -59,31 +70,35 @@ void setupGarcia() {
     Motor functions
 ------------------------------------------------------------------------------- */
 
-void MotorRight(int speed, bool direction) {
+void MotorRight(int speed, bool direction)
+{
     digitalWrite(MOTOR_RIGHT_DIR, direction);
     analogWrite(MOTOR_RIGHT_PWM, speed);
 }
 
-void MotorLeft(int speed, bool direction) {
+void MotorLeft(int speed, bool direction)
+{
     digitalWrite(MOTOR_LEFT_DIR, direction);
     analogWrite(MOTOR_LEFT_PWM, speed);
 }
 
-void StopMotors() {
+void StopMotors()
+{
     analogWrite(MOTOR_RIGHT_PWM, 0);
     analogWrite(MOTOR_LEFT_PWM, 0);
 }
-
 
 /* -------------------------------------------------------------------------------
     Sonar functions
 ------------------------------------------------------------------------------- */
 
-SONAR::SONAR(int triggerPin, int echoPin) 
-    : triggerPin(triggerPin), echoPin(echoPin) {
+SONAR::SONAR(int triggerPin, int echoPin)
+    : triggerPin(triggerPin), echoPin(echoPin)
+{
 }
 
-unsigned int SONAR::dist_cm() {
+unsigned int SONAR::dist_cm()
+{
     digitalWrite(triggerPin, LOW);
     delayMicroseconds(2);
     digitalWrite(triggerPin, HIGH);
@@ -93,7 +108,8 @@ unsigned int SONAR::dist_cm() {
     // 30 ms timeout (~5 m range)
     unsigned long duration = pulseIn(echoPin, HIGH, 30000UL);
 
-    if (duration == 0) {
+    if (duration == 0)
+    {
         // No echo -> too far or no object
         return 0;
     }
@@ -106,7 +122,8 @@ unsigned int SONAR::dist_cm() {
     RGB LED functions
 ------------------------------------------------------------------------------- */
 
-void RGB_setColor(unsigned char R, unsigned char G, unsigned char B) {
+void RGB_setColor(unsigned char R, unsigned char G, unsigned char B)
+{
     analogWrite(RGB_R, R);
     analogWrite(RGB_G, G);
     analogWrite(RGB_B, B);
@@ -119,7 +136,8 @@ void RGB_setColor(unsigned char R, unsigned char G, unsigned char B) {
 LineSensor::LineSensor(int s1Pin, int s2Pin, int s3Pin, int s4Pin, int s5Pin)
     : s1Pin(s1Pin), s2Pin(s2Pin), s3Pin(s3Pin), s4Pin(s4Pin), s5Pin(s5Pin) {}
 
-void LineSensor::readSensors(bool &s1Value, bool &s2Value, bool &s3Value, bool &s4Value, bool &s5Value) {
+void LineSensor::readSensors(bool &s1Value, bool &s2Value, bool &s3Value, bool &s4Value, bool &s5Value)
+{
     s1Value = digitalRead(s1Pin);
     s2Value = digitalRead(s2Pin);
     s3Value = digitalRead(s3Pin);
@@ -128,10 +146,33 @@ void LineSensor::readSensors(bool &s1Value, bool &s2Value, bool &s3Value, bool &
 }
 
 /* -------------------------------------------------------------------------------
+    Analog Line sensor functions (8 sensors)
+------------------------------------------------------------------------------- */
+
+AnalogLineSensor::AnalogLineSensor(int s1Pin, int s2Pin, int s3Pin, int s4Pin,
+                                   int s5Pin, int s6Pin, int s7Pin, int s8Pin)
+    : s1Pin(s1Pin), s2Pin(s2Pin), s3Pin(s3Pin), s4Pin(s4Pin),
+      s5Pin(s5Pin), s6Pin(s6Pin), s7Pin(s7Pin), s8Pin(s8Pin) {}
+
+void AnalogLineSensor::readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value,
+                                   int &s5Value, int &s6Value, int &s7Value, int &s8Value)
+{
+    s1Value = analogRead(s1Pin);
+    s2Value = analogRead(s2Pin);
+    s3Value = analogRead(s3Pin);
+    s4Value = analogRead(s4Pin);
+    s5Value = analogRead(s5Pin);
+    s6Value = analogRead(s6Pin);
+    s7Value = analogRead(s7Pin);
+    s8Value = analogRead(s8Pin);
+}
+
+/* -------------------------------------------------------------------------------
     LCD functions
 ------------------------------------------------------------------------------- */
 
-void lcd_write(String text, int row, int column) {
+void lcd_write(String text, int row, int column)
+{
     lcd.setCursor(column, row);
     lcd.print(text);
 }
@@ -142,32 +183,35 @@ void lcd_write(String text, int row, int column) {
 ColorSensor::ColorSensor(int s2Pin, int s3Pin, int outPin)
     : s2Pin(s2Pin), s3Pin(s3Pin), outPin(outPin) {}
 
-
-void ColorSensor::readColor() {
-    for (int x=0; x<3; x++) {
-        switch(x){
-            case 0:
-                digitalWrite(COLOR_S2, LOW);
-                digitalWrite(COLOR_S3, LOW);
-                break;
-            case 1:
-                digitalWrite(COLOR_S2, HIGH);
-                digitalWrite(COLOR_S3, HIGH);
-                break;
-            case 2:
-                digitalWrite(COLOR_S2, LOW);
-                digitalWrite(COLOR_S3, HIGH);
-                break;
-            case 3:
-                digitalWrite(COLOR_S2, HIGH);
-                digitalWrite(COLOR_S3, LOW);
-                break;
+void ColorSensor::readColor()
+{
+    for (int x = 0; x < 3; x++)
+    {
+        switch (x)
+        {
+        case 0:
+            digitalWrite(COLOR_S2, LOW);
+            digitalWrite(COLOR_S3, LOW);
+            break;
+        case 1:
+            digitalWrite(COLOR_S2, HIGH);
+            digitalWrite(COLOR_S3, HIGH);
+            break;
+        case 2:
+            digitalWrite(COLOR_S2, LOW);
+            digitalWrite(COLOR_S3, HIGH);
+            break;
+        case 3:
+            digitalWrite(COLOR_S2, HIGH);
+            digitalWrite(COLOR_S3, LOW);
+            break;
         }
         VR[x] = pulseIn(COLOR_OUT, LOW);
     }
-} 
+}
 
-void ColorSensor::showColor() {
+void ColorSensor::showColor()
+{
     Serial.print("R:");
     Serial.print(VR[0]);
     Serial.print("-G:");
@@ -176,48 +220,52 @@ void ColorSensor::showColor() {
     Serial.print(VR[2]);
     Serial.println("\n");
 }
-void ColorSensor::setupColor(int color, unsigned long r, unsigned long g, unsigned long b, unsigned long tolerance) {
-    //Implementation for color sensor calibration
-    switch(color) {
-        case 0:
-            Red[0] = r;
-            Red[1] = g;
-            Red[2] = b;
-            Red[3] = tolerance;
-            break;
-        case 1:
-            Green[0] = r;
-            Green[1] = g;
-            Green[2] = b;
-            Green[3] = tolerance;
-            break;
-        case 2:
-            Blue[0] = r;
-            Blue[1] = b;
-            Blue[2] = g;
-            Blue[3] = tolerance;
-            break;
+void ColorSensor::setupColor(int color, unsigned long r, unsigned long g, unsigned long b, unsigned long tolerance)
+{
+    // Implementation for color sensor calibration
+    switch (color)
+    {
+    case 0:
+        Red[0] = r;
+        Red[1] = g;
+        Red[2] = b;
+        Red[3] = tolerance;
+        break;
+    case 1:
+        Green[0] = r;
+        Green[1] = g;
+        Green[2] = b;
+        Green[3] = tolerance;
+        break;
+    case 2:
+        Blue[0] = r;
+        Blue[1] = b;
+        Blue[2] = g;
+        Blue[3] = tolerance;
+        break;
     }
 }
 
-int ColorSensor::isColor(int testColor) {
-    switch (testColor) {
-        case 0:
-            if((VR[0] > Red[0] - Red[3] && VR[0] < Red[0] + Red[3]) &&  (VR[1] > Red[1] - Red[3] && VR[1] < Red[1] + Red[3]) && (VR[2] > Red[2] - Red[3] && VR[2] < Red[2] + Red[3]))
-                return 1;
-                else
-                    return 0;
-        case 1:
-            if((VR[0] > Green[0] - Green[3] && VR[0] < Green[0] + Green[3]) &&  (VR[1] > Green[1] - Green[3] && VR[1] < Green[1] + Green[3]) && (VR[2] > Green[2] - Green[3] && VR[2] < Green[2] + Green[3]))
-                return 1;
-                else 
-                    return 0;
-        case 2:
-            if((VR[0] > Blue[0] - Blue[3] && VR[0] < Blue[0] + Blue[3]) &&  (VR[1] > Blue[1] - Blue[3] && VR[1] < Blue[1] + Blue[3]) && (VR[2] > Blue[2] - Blue[3] && VR[2] < Blue[2] + Blue[3]))
-                return 1;
-                else
-                    return 0;
-        default:
+int ColorSensor::isColor(int testColor)
+{
+    switch (testColor)
+    {
+    case 0:
+        if ((VR[0] > Red[0] - Red[3] && VR[0] < Red[0] + Red[3]) && (VR[1] > Red[1] - Red[3] && VR[1] < Red[1] + Red[3]) && (VR[2] > Red[2] - Red[3] && VR[2] < Red[2] + Red[3]))
+            return 1;
+        else
             return 0;
-    }       
+    case 1:
+        if ((VR[0] > Green[0] - Green[3] && VR[0] < Green[0] + Green[3]) && (VR[1] > Green[1] - Green[3] && VR[1] < Green[1] + Green[3]) && (VR[2] > Green[2] - Green[3] && VR[2] < Green[2] + Green[3]))
+            return 1;
+        else
+            return 0;
+    case 2:
+        if ((VR[0] > Blue[0] - Blue[3] && VR[0] < Blue[0] + Blue[3]) && (VR[1] > Blue[1] - Blue[3] && VR[1] < Blue[1] + Blue[3]) && (VR[2] > Blue[2] - Blue[3] && VR[2] < Blue[2] + Blue[3]))
+            return 1;
+        else
+            return 0;
+    default:
+        return 0;
+    }
 }

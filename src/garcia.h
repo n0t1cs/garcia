@@ -62,6 +62,16 @@
 #define LCD_SDA 20
 #define LCD_SCL 21
 
+// 8 Analog Line Sensor Array
+#define LINE_A1 A0
+#define LINE_A2 A1
+#define LINE_A3 A2
+#define LINE_A4 A3
+#define LINE_A5 A4
+#define LINE_A6 A5
+#define LINE_A7 A6
+#define LINE_A8 A7
+
 /* -------------------------------------------------------------------------------
     SONAR class
 ------------------------------------------------------------------------------- */
@@ -94,6 +104,30 @@ private:
     int s3Pin;
     int s4Pin;
     int s5Pin;
+};
+
+/* -------------------------------------------------------------------------------
+    Analog Line sensor class (8 sensors)
+------------------------------------------------------------------------------- */
+
+class AnalogLineSensor
+{
+public:
+    AnalogLineSensor(int s1Pin, int s2Pin, int s3Pin, int s4Pin,
+                     int s5Pin, int s6Pin, int s7Pin, int s8Pin);
+
+    void readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value,
+                     int &s5Value, int &s6Value, int &s7Value, int &s8Value);
+
+private:
+    int s1Pin;
+    int s2Pin;
+    int s3Pin;
+    int s4Pin;
+    int s5Pin;
+    int s6Pin;
+    int s7Pin;
+    int s8Pin;
 };
 
 /* -------------------------------------------------------------------------------
