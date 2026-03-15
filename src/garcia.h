@@ -1,9 +1,9 @@
 /*
-    * garcia.h
-    * Library Header File
-    * Used only for Garcia de Orta School robotics workshops (2025)
-    * Created on: Dec 12, 2025
-*/
+ * garcia.h
+ * Library Header File
+ * Used only for Garcia de Orta School robotics workshops (2025)
+ * Created on: Dec 12, 2025
+ */
 
 #ifndef GARCIA_H
 #define GARCIA_H
@@ -16,6 +16,7 @@
 #include <Wire.h>
 #include "LiquidCrystal_I2C.h"
 #include "TimerOne.h"
+#include <QTRSensors.h>
 
 /*
     Definitions
@@ -63,14 +64,16 @@
 #define LCD_SCL 21
 
 // 8 Analog Line Sensor Array
-#define LINE_A1 A0
-#define LINE_A2 A1
-#define LINE_A3 A2
-#define LINE_A4 A3
-#define LINE_A5 A4
-#define LINE_A6 A5
-#define LINE_A7 A6
-#define LINE_A8 A7
+#define LINE_S1_A A0
+#define LINE_S2_A A1
+#define LINE_S3_A A2
+#define LINE_S4_A A3
+#define LINE_S5_A A4
+#define LINE_S6_A A5
+#define LINE_S7_A A6
+#define LINE_S8_A A7
+
+#define EMITTER_PIN 2 // Dont know what this make, but works Ass: Gabriel
 
 /* -------------------------------------------------------------------------------
     SONAR class
@@ -86,7 +89,6 @@ private:
     int triggerPin;
     int echoPin;
 };
-
 
 /* -------------------------------------------------------------------------------
     Line sensor class
@@ -110,14 +112,14 @@ private:
     Analog Line sensor class (8 sensors)
 ------------------------------------------------------------------------------- */
 
-class AnalogLineSensor
+class LineSensorAnalog
 {
 public:
-    AnalogLineSensor(int s1Pin, int s2Pin, int s3Pin, int s4Pin,
-                     int s5Pin, int s6Pin, int s7Pin, int s8Pin);
-
-    void readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value,
-                     int &s5Value, int &s6Value, int &s7Value, int &s8Value);
+    LineSensorAnalog(int s1Pin, int s2Pin, int s3Pin, int s4Pin, int s5Pin, int s6Pin, int s7Pin, int s8Pin, int SensorCount = 8);
+    void readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value);
+    void calibrateSensors(uint16_t iterations);
+    void setupLineSensorsAnalog();
+    void PrintCalibrationResults();
 
 private:
     int s1Pin;
@@ -128,6 +130,8 @@ private:
     int s6Pin;
     int s7Pin;
     int s8Pin;
+    uint8_t sensorPins[8];
+    int SensorCount;
 };
 
 /* -------------------------------------------------------------------------------
@@ -148,23 +152,23 @@ private:
     int s3Pin;
     int outPin;
     unsigned long VR[4];
-    unsigned long Red[4] = {0,0,0,0};
-    unsigned long Green[4] = {0,0,0,0};
-    unsigned long Blue[4] = {0,0,0,0};
+    unsigned long Red[4] = {0, 0, 0, 0};
+    unsigned long Green[4] = {0, 0, 0, 0};
+    unsigned long Blue[4] = {0, 0, 0, 0};
 };
 
 /*
     Function declarations
 */
 
-void setupGarcia(); //Initialize the Garcia library
-void MotorRight(int speed, bool direction); //Control the right motor
-void MotorLeft(int speed, bool direction); //Control the left motor
-void StopMotors(); //Stop both motors
+void setupGarcia();                         // Initialize the Garcia library
+void MotorRight(int speed, bool direction); // Control the right motor
+void MotorLeft(int speed, bool direction);  // Control the left motor
+void StopMotors();                          // Stop both motors
 
-void RGB_setColor(unsigned char R, unsigned char G, unsigned char B); //Set RGB LED color
+void RGB_setColor(unsigned char R, unsigned char G, unsigned char B); // Set RGB LED color
 
-void lcd_write(String text, int row, int column); //Write text to LCD at specified position
+void lcd_write(String text, int row, int column); // Write text to LCD at specified position
 
 extern SONAR sonar_right;
 extern SONAR sonar_left;

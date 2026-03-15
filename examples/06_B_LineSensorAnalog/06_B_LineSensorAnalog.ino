@@ -1,12 +1,14 @@
 #include "garcia.h"
 
-AnalogLineSensor lineArray(LINE_A1, LINE_A2, LINE_A3, LINE_A4,
-                           LINE_A5, LINE_A6, LINE_A7, LINE_A8);
+LineSensorAnalog lineArray(LINE_S1_A, LINE_S2_A, LINE_S3_A, LINE_S4_A, LINE_S5_A, LINE_S6_A, LINE_S7_A, LINE_S8_A, 8);
 
 void setup()
 {
     setupGarcia();
+    lineArray.setupLineSensorsAnalog();
     Serial.begin(9600);
+    lineArray.calibrateSensors(400);
+    lineArray.PrintCalibrationResults();
 }
 
 void loop()

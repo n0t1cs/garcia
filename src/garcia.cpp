@@ -11,6 +11,7 @@
 LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 SONAR sonar_right(TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT);
 SONAR sonar_left(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT);
+QTRSensors qtr;
 
 /* -------------------------------------------------------------------------------
     Setup functions
@@ -52,14 +53,14 @@ void setupGarcia()
     pinMode(COLOR_OUT, INPUT);
 
     // Initialize 8 Analog Line Sensors
-    pinMode(LINE_A1, INPUT);
-    pinMode(LINE_A2, INPUT);
-    pinMode(LINE_A3, INPUT);
-    pinMode(LINE_A4, INPUT);
-    pinMode(LINE_A5, INPUT);
-    pinMode(LINE_A6, INPUT);
-    pinMode(LINE_A7, INPUT);
-    pinMode(LINE_A8, INPUT);
+    pinMode(LINE_S1_A, INPUT);
+    pinMode(LINE_S2_A, INPUT);
+    pinMode(LINE_S3_A, INPUT);
+    pinMode(LINE_S4_A, INPUT);
+    pinMode(LINE_S5_A, INPUT);
+    pinMode(LINE_S6_A, INPUT);
+    pinMode(LINE_S7_A, INPUT);
+    pinMode(LINE_S8_A, INPUT);
 
     // Initialize LCD
     lcd.init();
@@ -149,22 +150,60 @@ void LineSensor::readSensors(bool &s1Value, bool &s2Value, bool &s3Value, bool &
     Analog Line sensor functions (8 sensors)
 ------------------------------------------------------------------------------- */
 
-AnalogLineSensor::AnalogLineSensor(int s1Pin, int s2Pin, int s3Pin, int s4Pin,
-                                   int s5Pin, int s6Pin, int s7Pin, int s8Pin)
-    : s1Pin(s1Pin), s2Pin(s2Pin), s3Pin(s3Pin), s4Pin(s4Pin),
-      s5Pin(s5Pin), s6Pin(s6Pin), s7Pin(s7Pin), s8Pin(s8Pin) {}
 
-void AnalogLineSensor::readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value,
-                                   int &s5Value, int &s6Value, int &s7Value, int &s8Value)
+LineSensorAnalog::LineSensorAnalog(int s1Pin, int s2Pin, int s3Pin, int s4Pin, int s5Pin, int s6Pin, int s7Pin, int s8Pin, int SensorCount)
+    : s1Pin(s1Pin), s2Pin(s2Pin), s3Pin(s3Pin), s4Pin(s4Pin), s5Pin(s5Pin), s6Pin(s6Pin), s7Pin(s7Pin), s8Pin(s8Pin), SensorCount(SensorCount) {}
+
+
+void LineSensorAnalog::setupLineSensorsAnalog()
 {
-    s1Value = analogRead(s1Pin);
-    s2Value = analogRead(s2Pin);
-    s3Value = analogRead(s3Pin);
-    s4Value = analogRead(s4Pin);
-    s5Value = analogRead(s5Pin);
-    s6Value = analogRead(s6Pin);
-    s7Value = analogRead(s7Pin);
-    s8Value = analogRead(s8Pin);
+    qtr.setTypeRC();
+    sensorPins[0] = static_cast<uint8_t>(s1Pin);
+    sensorPins[1] = static_cast<uint8_t>(s2Pin);
+    sensorPins[2] = static_cast<uint8_t>(s3Pin);
+    sensorPins[3] = static_cast<uint8_t>(s4Pin);
+    sensorPins[4] = static_cast<uint8_t>(s5Pin);
+    sensorPins[5] = static_cast<uint8_t>(s6Pin);
+    sensorPins[6] = static_cast<uint8_t>(s7Pin);
+    sensorPins[7] = static_cast<uint8_t>(s8Pin);
+    qtr.setSensorPins(sensorPins, SensorCount);
+    qtr.setEmitterPin(EMITTER_PIN);
+}
+
+void LineSensorAnalog::calibrateSensors(uint16_t iterations)
+{
+    for (uint16_t i = 0; i < iterations; i++)
+    {
+        qtr.calibrate();
+    }
+}
+
+void LineSensorAnalog::PrintCalibrationResults()
+{
+    Serial.println("Calibration complete. Sensor values:");
+    for (uint8_t i = 0; i < SensorCount; i++)
+    {
+        Serial.print("Sensor ");
+        Serial.print(i + 1);
+        Serial.print(": Min=");
+        Serial.print(qtr.calibrationOn.minimum[i]);
+        Serial.print(", Max=");
+        Serial.println(qtr.calibrationOn.maximum[i]);
+    }
+}
+
+void LineSensorAnalog::readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value)
+{
+    uint16_t sensorValues[SensorCount];
+    qtr.read(sensorValues);
+    s1Value = sensorValues[0];
+    s2Value = sensorValues[1];
+    s3Value = sensorValues[2];
+    s4Value = sensorValues[3];
+    s5Value = sensorValues[4];
+    s6Value = sensorValues[5];
+    s7Value = sensorValues[6];
+    s8Value = sensorValues[7];
 }
 
 /* -------------------------------------------------------------------------------
