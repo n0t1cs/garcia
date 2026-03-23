@@ -1,6 +1,6 @@
 #include "garcia.h"
 
-LineSensorAnalog lineArray(LINE_S1_A, LINE_S2_A, LINE_S3_A, LINE_S4_A, LINE_S5_A, LINE_S6_A, LINE_S7_A, LINE_S8_A, 8);
+LineSensorAnalog lineArray(LINE_S1_A, LINE_S2_A, LINE_S3_A, LINE_S4_A, LINE_S5_A, LINE_S6_A, LINE_S7_A, LINE_S8_A, ANALOG_NUMBER);
 
 void setup()
 {

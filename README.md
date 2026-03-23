@@ -567,7 +567,7 @@ This is more advanced than `LineSensor`, but it is also more powerful because it
 ```cpp
 LineSensorAnalog lineArray(
   LINE_S1_A, LINE_S2_A, LINE_S3_A, LINE_S4_A,
-  LINE_S5_A, LINE_S6_A, LINE_S7_A, LINE_S8_A, 8
+  LINE_S5_A, LINE_S6_A, LINE_S7_A, LINE_S8_A, ANALOG_NUMBER
 );
 ```
 

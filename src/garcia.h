@@ -75,6 +75,8 @@
 
 #define EMITTER_PIN 2 // Dont know what this make, but works Ass: Gabriel
 
+#define ANALOG_NUMBER 8
+
 /* -------------------------------------------------------------------------------
     SONAR class
 ------------------------------------------------------------------------------- */
