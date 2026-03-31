@@ -278,8 +278,8 @@ void ColorSensor::setupColor(int color, unsigned long r, unsigned long g, unsign
         break;
     case 2:
         Blue[0] = r;
-        Blue[1] = b;
-        Blue[2] = g;
+        Blue[1] = g;
+        Blue[2] = b;
         Blue[3] = tolerance;
         break;
     }
