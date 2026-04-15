@@ -64,16 +64,16 @@
 #define LCD_SCL 21
 
 // 8 Analog Line Sensor Array
-#define LINE_S1_A A9
-#define LINE_S2_A A10
-#define LINE_S3_A A11
-#define LINE_S4_A A12
-#define LINE_S5_A A13
-#define LINE_S6_A A14
-#define LINE_S7_A A15
-#define LINE_S8_A A16
+#define LINE_S1_A A8
+#define LINE_S2_A A9
+#define LINE_S3_A A10
+#define LINE_S4_A A11
+#define LINE_S5_A A12
+#define LINE_S6_A A13
+#define LINE_S7_A A14
+#define LINE_S8_A A15
 
-#define EMITTER_PIN 20 // Dont know what this make, but works Ass: Gabriel
+// #define EMITTER_PIN  // Dont know what this make, but works Ass: Gabriel
 
 #define ANALOG_NUMBER 8
 

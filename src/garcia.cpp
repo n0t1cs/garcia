@@ -155,7 +155,7 @@ LineSensorAnalog::LineSensorAnalog(int s1Pin, int s2Pin, int s3Pin, int s4Pin, i
 
 void LineSensorAnalog::setupLineSensorsAnalog()
 {
-    qtr.setTypeRC();
+    qtr.setTypeAnalog();
     sensorPins[0] = static_cast<uint8_t>(s1Pin);
     sensorPins[1] = static_cast<uint8_t>(s2Pin);
     sensorPins[2] = static_cast<uint8_t>(s3Pin);
@@ -165,7 +165,7 @@ void LineSensorAnalog::setupLineSensorsAnalog()
     sensorPins[6] = static_cast<uint8_t>(s7Pin);
     sensorPins[7] = static_cast<uint8_t>(s8Pin);
     qtr.setSensorPins(sensorPins, SensorCount);
-    qtr.setEmitterPin(EMITTER_PIN);
+    //qtr.setEmitterPin(EMITTER_PIN);
 }
 
 void LineSensorAnalog::calibrateSensors(uint16_t iterations)
@@ -207,7 +207,7 @@ void LineSensorAnalog::readSensors(int &s1Value, int &s2Value, int &s3Value, int
 unsigned int LineSensorAnalog::readLine(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value)
 {
     uint16_t sensorValues[SensorCount];
-    int v = qtr.readLinePrivate(sensorValues);
+    int v = qtr.readLineBlack(sensorValues);
     s1Value = sensorValues[0];
     s2Value = sensorValues[1];
     s3Value = sensorValues[2];
