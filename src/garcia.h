@@ -119,7 +119,7 @@ class LineSensorAnalog
 public:
     
     LineSensorAnalog(int s1Pin, int s2Pin, int s3Pin, int s4Pin, int s5Pin, int s6Pin, int s7Pin, int s8Pin, int SensorCount = 8);
-    unsigned int readLine();
+    unsigned int readLine(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value);
     void readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value);
     void calibrateSensors(uint16_t iterations);
     void setupLineSensorsAnalog();
