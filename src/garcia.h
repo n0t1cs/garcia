@@ -64,16 +64,16 @@
 #define LCD_SCL 21
 
 // 8 Analog Line Sensor Array
-#define LINE_S1_A A0
-#define LINE_S2_A A1
-#define LINE_S3_A A2
-#define LINE_S4_A A3
-#define LINE_S5_A A4
-#define LINE_S6_A A5
-#define LINE_S7_A A6
-#define LINE_S8_A A7
+#define LINE_S1_A A9
+#define LINE_S2_A A10
+#define LINE_S3_A A11
+#define LINE_S4_A A12
+#define LINE_S5_A A13
+#define LINE_S6_A A14
+#define LINE_S7_A A15
+#define LINE_S8_A A16
 
-#define EMITTER_PIN 2 // Dont know what this make, but works Ass: Gabriel
+#define EMITTER_PIN 20 // Dont know what this make, but works Ass: Gabriel
 
 #define ANALOG_NUMBER 8
 
@@ -117,7 +117,9 @@ private:
 class LineSensorAnalog
 {
 public:
+    
     LineSensorAnalog(int s1Pin, int s2Pin, int s3Pin, int s4Pin, int s5Pin, int s6Pin, int s7Pin, int s8Pin, int SensorCount = 8);
+    unsigned int readLine();
     void readSensors(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value);
     void calibrateSensors(uint16_t iterations);
     void setupLineSensorsAnalog();

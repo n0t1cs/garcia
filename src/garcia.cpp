@@ -150,10 +150,8 @@ void LineSensor::readSensors(bool &s1Value, bool &s2Value, bool &s3Value, bool &
     Analog Line sensor functions (8 sensors)
 ------------------------------------------------------------------------------- */
 
-
 LineSensorAnalog::LineSensorAnalog(int s1Pin, int s2Pin, int s3Pin, int s4Pin, int s5Pin, int s6Pin, int s7Pin, int s8Pin, int SensorCount)
     : s1Pin(s1Pin), s2Pin(s2Pin), s3Pin(s3Pin), s4Pin(s4Pin), s5Pin(s5Pin), s6Pin(s6Pin), s7Pin(s7Pin), s8Pin(s8Pin), SensorCount(SensorCount) {}
-
 
 void LineSensorAnalog::setupLineSensorsAnalog()
 {
@@ -204,6 +202,21 @@ void LineSensorAnalog::readSensors(int &s1Value, int &s2Value, int &s3Value, int
     s6Value = sensorValues[5];
     s7Value = sensorValues[6];
     s8Value = sensorValues[7];
+}
+
+unsigned int LineSensorAnalog::readLine(int &s1Value, int &s2Value, int &s3Value, int &s4Value, int &s5Value, int &s6Value, int &s7Value, int &s8Value)
+{
+    uint16_t sensorValues[SensorCount];
+    int v = qtr.readLinePrivate(sensorValues);
+    s1Value = sensorValues[0];
+    s2Value = sensorValues[1];
+    s3Value = sensorValues[2];
+    s4Value = sensorValues[3];
+    s5Value = sensorValues[4];
+    s6Value = sensorValues[5];
+    s7Value = sensorValues[6];
+    s8Value = sensorValues[7];
+    return v;
 }
 
 /* -------------------------------------------------------------------------------
