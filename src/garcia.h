@@ -110,6 +110,14 @@ private:
     int s5Pin;
 };
 
+class LineSensor3 {
+public:
+    LineSensor3(int s1Pin, int s2Pin, int s3Pin);
+    void readSensors(bool &s1Value, bool &s2Value, bool &s3Value);
+private:
+    int s1Pin, s2Pin, s3Pin;
+};
+
 /* -------------------------------------------------------------------------------
     Analog Line sensor class (8 sensors)
 ------------------------------------------------------------------------------- */
