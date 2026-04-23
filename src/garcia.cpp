@@ -147,10 +147,10 @@ void LineSensor::readSensors(bool &s1Value, bool &s2Value, bool &s3Value, bool &
 }
 
 
-LineSensor::LineSensor_3(int s1Pin, int s2Pin, int s3Pin)
+LineSensor_3::LineSensor_3(int s1Pin, int s2Pin, int s3Pin)
     : s1Pin(s1Pin), s2Pin(s2Pin), s3Pin(s3Pin){}
 
-void LineSensor::readSensors_3(bool &s1Value, bool &s2Value, bool &s3Value)
+void LineSensor_3::readSensors_3(bool &s1Value, bool &s2Value, bool &s3Value)
 {
     s1Value = digitalRead(s1Pin);
     s2Value = digitalRead(s2Pin);
